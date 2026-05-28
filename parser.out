@@ -1,0 +1,115 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> encantamento
+Rule 1     encantamento -> ELEMENTO estados efeitos
+Rule 2     encantamento -> ELEMENTO efeitos
+Rule 3     estados -> ESTADO
+Rule 4     efeitos -> EFEITO
+Rule 5     efeitos -> EFEITO EFEITO
+Rule 6     efeitos -> EFEITO EFEITO EFEITO
+
+Terminals, with rules where they appear
+
+EFEITO               : 4 5 5 6 6 6
+ELEMENTO             : 1 2
+ESTADO               : 3
+error                : 
+
+Nonterminals, with rules where they appear
+
+efeitos              : 1 2
+encantamento         : 0
+estados              : 1
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . encantamento
+    (1) encantamento -> . ELEMENTO estados efeitos
+    (2) encantamento -> . ELEMENTO efeitos
+
+    ELEMENTO        shift and go to state 2
+
+    encantamento                   shift and go to state 1
+
+state 1
+
+    (0) S' -> encantamento .
+
+
+
+state 2
+
+    (1) encantamento -> ELEMENTO . estados efeitos
+    (2) encantamento -> ELEMENTO . efeitos
+    (3) estados -> . ESTADO
+    (4) efeitos -> . EFEITO
+    (5) efeitos -> . EFEITO EFEITO
+    (6) efeitos -> . EFEITO EFEITO EFEITO
+
+    ESTADO          shift and go to state 5
+    EFEITO          shift and go to state 6
+
+    estados                        shift and go to state 3
+    efeitos                        shift and go to state 4
+
+state 3
+
+    (1) encantamento -> ELEMENTO estados . efeitos
+    (4) efeitos -> . EFEITO
+    (5) efeitos -> . EFEITO EFEITO
+    (6) efeitos -> . EFEITO EFEITO EFEITO
+
+    EFEITO          shift and go to state 6
+
+    efeitos                        shift and go to state 7
+
+state 4
+
+    (2) encantamento -> ELEMENTO efeitos .
+
+    $end            reduce using rule 2 (encantamento -> ELEMENTO efeitos .)
+
+
+state 5
+
+    (3) estados -> ESTADO .
+
+    EFEITO          reduce using rule 3 (estados -> ESTADO .)
+
+
+state 6
+
+    (4) efeitos -> EFEITO .
+    (5) efeitos -> EFEITO . EFEITO
+    (6) efeitos -> EFEITO . EFEITO EFEITO
+
+    $end            reduce using rule 4 (efeitos -> EFEITO .)
+    EFEITO          shift and go to state 8
+
+
+state 7
+
+    (1) encantamento -> ELEMENTO estados efeitos .
+
+    $end            reduce using rule 1 (encantamento -> ELEMENTO estados efeitos .)
+
+
+state 8
+
+    (5) efeitos -> EFEITO EFEITO .
+    (6) efeitos -> EFEITO EFEITO . EFEITO
+
+    $end            reduce using rule 5 (efeitos -> EFEITO EFEITO .)
+    EFEITO          shift and go to state 9
+
+
+state 9
+
+    (6) efeitos -> EFEITO EFEITO EFEITO .
+
+    $end            reduce using rule 6 (efeitos -> EFEITO EFEITO EFEITO .)
+
