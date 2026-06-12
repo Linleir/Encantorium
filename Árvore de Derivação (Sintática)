@@ -1,0 +1,22 @@
+                          expressao_magica
+                                  |
+               ---------------------------------------
+               |                  |                  |
+        expressao_magica          ET          expressao_magica
+               |                 (et)                |
+        ---------------                        encantamento
+        |             |                              |
+  INTENSIDADE expressao_magica         -------------------------
+     (maxima)         |                |                       |
+                 encantamento       ELEMENTO             lista_efeitos
+                      |              (fira)                    |
+          -------------------------                   -------------------
+          |           |           |                   |                 |
+       ELEMENTO    ESTADO   lista_efeitos           EFEITO        lista_efeitos
+        (aqua)    (matera)        |                (danum)              |
+                                  |                                   EFEITO
+                                EFEITO                               (danum)
+                               (curam)
+
+
+Sentença de Entrada: maxima aqua matera curam et fira danum danum
