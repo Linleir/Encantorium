@@ -1,151 +1,141 @@
 import ply.lex as lex
 import ply.yacc as yacc
 
-# Lista de tokens que serão reconhecidos pelo lexer
+# ==========================================
+# 1. ANÁLISE LÉXICA (Scanner)
+# ==========================================
+# Definição dos tokens baseados em expressões regulares
+
 tokens = (
-    'ELEMENTO',  # Elementos básicos: aqua, fira, ventus, terra
-    'ESTADO',    # Estados da matéria: matera, gaser, fluidus
-    'EFEITO',    # Efeitos adicionais: danum, curam, parali, sonium, reparo
+    'ELEMENTO',     # aqua, fira, ventus, terra
+    'ESTADO',       # matera, gaser, fluidus
+    'EFEITO',       # danum, curam, parali, sonium, reparo
+    'INTENSIDADE',  # maxima, minima
+    'ET',           # et (Conjunção E)
+    'VEL',          # vel (Conjunção OU)
+    'LPAREN',       # (
+    'RPAREN'        # )
 )
 
-# Regras para o reconhecimento dos tokens
-t_ELEMENTO = r'aqua|fira|ventus|terra'   # Expressões regulares para elementos
-t_ESTADO = r'matera|gaser|fluidus'       # Expressões regulares para estados da matéria
-t_EFEITO = r'danum|curam|parali|sonium|reparo'  # Expressões regulares para efeitos
+# Expressões Regulares para tokens simples
+t_ELEMENTO = r'aqua|fira|ventus|terra'
+t_ESTADO = r'matera|gaser|fluidus'
+t_EFEITO = r'danum|curam|parali|sonium|reparo'
+t_INTENSIDADE = r'maxima|minima'
+t_ET = r'et'
+t_VEL = r'vel'
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
 
-# Ignorar espaços e tabulações
 t_ignore = ' \t'
 
-# Função para tratar caracteres ilegais
 def t_error(t):
-    t.lexer.skip(len(t.value))  # Ignorar todo o token inválido
-    raise ValueError(f"Caractere ilegal '{t.value[0]}'")
+    print(f"Erro léxico: Caractere ilegal '{t.value[0]}' encontrado.")
+    t.lexer.skip(1)
 
-# Construir o lexer
 lexer = lex.lex()
 
-# Gramática do parser
+# ==========================================
+# 2. ANÁLISE SINTÁTICA E SEMÂNTICA (Parser)
+# ==========================================
 
-# Regra principal para um encantamento
-def p_encantamento(p):
-    '''
-    encantamento : ELEMENTO estados efeitos  
-                 | ELEMENTO efeitos          
-    '''
-    if len(p) == 4:
-        p[0] = (p[1], p[2], p[3])  # Encantamento com estado
-    else:
-        p[0] = (p[1], None, p[2])  # Encantamento sem estado (fira)
+# Regras de Precedência para eliminação de ambiguidade
+precedence = (
+    ('left', 'VEL'),
+    ('left', 'ET'),
+    ('right', 'INTENSIDADE'), # Unário possui precedência maior
+)
 
-# Regra para estados da matéria
-def p_estados(p):
-    '''
-    estados : ESTADO  
-    '''
+# Gramática Livre de Contexto (GLC) e Ações Semânticas
+
+def p_expressao_magica_binop(p):
+    '''expressao_magica : expressao_magica VEL expressao_magica
+                        | expressao_magica ET expressao_magica'''
+    # Ação Semântica: Criação de nó na Árvore Sintática (AST)
+    p[0] = ('binop', p[2], p[1], p[3]) 
+
+def p_expressao_magica_unary(p):
+    'expressao_magica : INTENSIDADE expressao_magica'
+    p[0] = ('unary', p[1], p[2])
+
+def p_expressao_magica_group(p):
+    'expressao_magica : LPAREN expressao_magica RPAREN'
+    p[0] = p[2]
+
+def p_expressao_magica_encantamento(p):
+    'expressao_magica : encantamento'
     p[0] = p[1]
 
-# Regra para efeitos
-def p_efeitos(p):
-    '''
-    efeitos : EFEITO                
-            | EFEITO EFEITO         
-            | EFEITO EFEITO EFEITO  
-    '''
-    p[0] = p[1:]
+def p_encantamento_estado(p):
+    'encantamento : ELEMENTO ESTADO lista_efeitos'
+    p[0] = ('spell', p[1], p[2], p[3])
 
-# Função para tratar erros de sintaxe
+def p_encantamento_simples(p):
+    'encantamento : ELEMENTO lista_efeitos'
+    p[0] = ('spell', p[1], None, p[2])
+
+# AUTOINCORPORAÇÃO: Permite encadeamento infinito de efeitos
+def p_lista_efeitos_recursivo(p):
+    'lista_efeitos : EFEITO lista_efeitos'
+    p[0] = [p[1]] + p[2]
+
+def p_lista_efeitos_base(p):
+    'lista_efeitos : EFEITO'
+    p[0] = [p[1]]
+
 def p_error(p):
-    raise SyntaxError("Erro de sintaxe!")
+    if p:
+        print(f"Erro de sintaxe próximo ao token '{p.value}'")
+    else:
+        print("Erro de sintaxe: fim de entrada inesperado.")
 
-# Construir o parser
 parser = yacc.yacc()
 
-# Função para compilar e verificar o encantamento
-def compile_spell(spell):
-    lexer.input(spell)
-    
-    tokens_invalidos = []
-    valid_tokens = []
-    
-    # Verificar tokens inválidos e coletar tokens válidos
-    while True:
-        try:
-            tok = lexer.token()
-            if not tok:
-                break
-            if tok.type == 'ERROR':
-                tokens_invalidos.append(tok.value)
-            else:
-                valid_tokens.append(tok.value)
-        except ValueError as e:
-            return f"Erro: {str(e)}"
-    
-    if tokens_invalidos:
-        return f"Erro: Caractere(s) ilegal(is) encontrado(s): {', '.join(tokens_invalidos)}."
+# ==========================================
+# 3. GERAÇÃO DE CÓDIGO (Tradução da AST)
+# ==========================================
 
-    # Recriar a string de entrada apenas com os tokens válidos para o parser
-    valid_spell = ' '.join(valid_tokens)
-    
-    try:
-        result = parser.parse(valid_spell)
-    except (SyntaxError, ValueError) as e:
-        return f"Erro: {str(e)}"
-    
-    if result:
-        elemento, estado, efeitos = result
+def compilar_traducao(node):
+    forma_elemento = {'aqua': 'Círculo', 'fira': 'Triângulo', 'ventus': 'Linha', 'terra': 'Quadrado'}
+    forma_estado = {'matera': 'Retângulo', 'gaser': 'Losango', 'fluidus': 'Oval'}
+    forma_efeito = {'danum': 'Estrela', 'curam': 'Coração', 'parali': 'Cruz', 'sonium': 'Lua', 'reparo': 'Seta'}
+
+    if node[0] == 'spell':
+        _, elem, est, ef_list = node
         
-        # Verificação se fira tem estado da matéria
-        if elemento == 'fira' and estado is not None:
-            return "Erro: Encantamentos de fogo não devem especificar o estado da matéria."
+        # Validações Semânticas de Tipos/Regras
+        if elem == 'fira' and est is not None:
+            return "[ERRO: 'fira' não suporta estado da matéria]"
+        if elem != 'fira' and est is None:
+            return f"[ERRO: '{elem}' exige um estado da matéria]"
         
-        # Verificação se outros elementos têm estado da matéria
-        if elemento != 'fira' and estado is None:
-            return "Erro: Encantamentos de água, vento e terra precisam especificar o estado da matéria."
-        
-        # Verificação de efeitos repetidos ou únicos
-        if len(efeitos) != len(set(efeitos)) and len(set(efeitos)) != 1:
-            return "Erro: Todos os efeitos devem ser iguais ou todos diferentes."
+        trans = forma_elemento[elem]
+        if est: trans += f" {forma_estado[est]}"
+        for ef in ef_list: trans += f" {forma_efeito[ef]}"
+        return f"[{trans}]"
 
-        # Geração da tradução direta se o encantamento for válido
-        return generate_translation(elemento, estado, efeitos)
-    else:
-        return "Erro: Encantamento inválido."
+    elif node[0] == 'binop':
+        op = " + " if node[1] == 'et' else " OU "
+        return f"({compilar_traducao(node[2])}{op}{compilar_traducao(node[3])})"
 
-# Função para gerar a tradução direta do encantamento
-def generate_translation(elemento, estado, efeitos):
-    forma_elemento = {
-        'aqua': 'Círculo',
-        'fira': 'Triângulo',
-        'ventus': 'Linha',
-        'terra': 'Quadrado'
-    }
-    
-    forma_estado = {
-        'matera': 'Retângulo',
-        'gaser': 'Losango',
-        'fluidus': 'Oval'
-    }
-    
-    forma_efeito = {
-        'danum': 'Estrela',
-        'curam': 'Coração',
-        'parali': 'Cruz',
-        'sonium': 'Lua',
-        'reparo': 'Seta'
-    }
+    elif node[0] == 'unary':
+        mod = "AMPLIFICADO" if node[1] == 'maxima' else "REDUZIDO"
+        return f"{mod}({compilar_traducao(node[2])})"
 
-    # Construção da tradução direta
-    translation = f"{forma_elemento[elemento]}"
-    if estado:
-        translation += f" {forma_estado[estado]}"
-    for efeito in efeitos:
-        translation += f" {forma_efeito[efeito]}"
-    
-    return translation
-
-# Loop para permitir que o usuário insira encantamentos
+# ==========================================
+# LOOP PRINCIPAL
+# ==========================================
+print("=== Compilador Encantorium 2.0 ===")
+print("Dica de sentença válida: maxima aqua matera curam curam et fira danum")
 while True:
-    spell = input("Insira o encantamento mágico (ou 'sair' para finalizar): ")
-    if spell.lower() == 'sair':
+    try:
+        s = input('\nInsira o encantamento > ')
+    except EOFError:
         break
-    print(compile_spell(spell))
+    if not s or s.lower() == 'sair':
+        break
+    
+    ast = parser.parse(s)
+    if ast:
+        resultado = compilar_traducao(ast)
+        print(f"-> Tradução Compilada: {resultado}")
