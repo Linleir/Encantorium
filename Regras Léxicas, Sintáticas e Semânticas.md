@@ -1,7 +1,6 @@
 # Encantorium: Compilador de Sistemas Mágicos Dinâmicos
 
-**Disciplina:** Compiladores (2026_1)  
-**Projeto:** Prova P2 - Parte #2  
+**Disciplina:** Compiladores (2026_1)
 
 ---
 
