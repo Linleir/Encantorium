@@ -1,0 +1,340 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> expressao_magica
+Rule 1     expressao_magica -> expressao_magica VEL expressao_magica
+Rule 2     expressao_magica -> expressao_magica INTRA expressao_magica
+Rule 3     expressao_magica -> expressao_magica ET expressao_magica
+Rule 4     expressao_magica -> INTENSIDADE expressao_magica
+Rule 5     expressao_magica -> LPAREN expressao_magica RPAREN
+Rule 6     expressao_magica -> encantamento
+Rule 7     encantamento -> ELEMENTO ESTADO lista_efeitos
+Rule 8     encantamento -> ELEMENTO lista_efeitos
+Rule 9     lista_efeitos -> EFEITO lista_efeitos
+Rule 10    lista_efeitos -> EFEITO
+
+Terminals, with rules where they appear
+
+EFEITO               : 9 10
+ELEMENTO             : 7 8
+ESTADO               : 7
+ET                   : 3
+INTENSIDADE          : 4
+INTRA                : 2
+LPAREN               : 5
+RPAREN               : 5
+VEL                  : 1
+error                : 
+
+Nonterminals, with rules where they appear
+
+encantamento         : 6
+expressao_magica     : 1 1 2 2 3 3 4 5 0
+lista_efeitos        : 7 8 9
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expressao_magica
+    (1) expressao_magica -> . expressao_magica VEL expressao_magica
+    (2) expressao_magica -> . expressao_magica INTRA expressao_magica
+    (3) expressao_magica -> . expressao_magica ET expressao_magica
+    (4) expressao_magica -> . INTENSIDADE expressao_magica
+    (5) expressao_magica -> . LPAREN expressao_magica RPAREN
+    (6) expressao_magica -> . encantamento
+    (7) encantamento -> . ELEMENTO ESTADO lista_efeitos
+    (8) encantamento -> . ELEMENTO lista_efeitos
+
+    INTENSIDADE     shift and go to state 2
+    LPAREN          shift and go to state 3
+    ELEMENTO        shift and go to state 5
+
+    expressao_magica               shift and go to state 1
+    encantamento                   shift and go to state 4
+
+state 1
+
+    (0) S' -> expressao_magica .
+    (1) expressao_magica -> expressao_magica . VEL expressao_magica
+    (2) expressao_magica -> expressao_magica . INTRA expressao_magica
+    (3) expressao_magica -> expressao_magica . ET expressao_magica
+
+    VEL             shift and go to state 6
+    INTRA           shift and go to state 7
+    ET              shift and go to state 8
+
+
+state 2
+
+    (4) expressao_magica -> INTENSIDADE . expressao_magica
+    (1) expressao_magica -> . expressao_magica VEL expressao_magica
+    (2) expressao_magica -> . expressao_magica INTRA expressao_magica
+    (3) expressao_magica -> . expressao_magica ET expressao_magica
+    (4) expressao_magica -> . INTENSIDADE expressao_magica
+    (5) expressao_magica -> . LPAREN expressao_magica RPAREN
+    (6) expressao_magica -> . encantamento
+    (7) encantamento -> . ELEMENTO ESTADO lista_efeitos
+    (8) encantamento -> . ELEMENTO lista_efeitos
+
+    INTENSIDADE     shift and go to state 2
+    LPAREN          shift and go to state 3
+    ELEMENTO        shift and go to state 5
+
+    expressao_magica               shift and go to state 9
+    encantamento                   shift and go to state 4
+
+state 3
+
+    (5) expressao_magica -> LPAREN . expressao_magica RPAREN
+    (1) expressao_magica -> . expressao_magica VEL expressao_magica
+    (2) expressao_magica -> . expressao_magica INTRA expressao_magica
+    (3) expressao_magica -> . expressao_magica ET expressao_magica
+    (4) expressao_magica -> . INTENSIDADE expressao_magica
+    (5) expressao_magica -> . LPAREN expressao_magica RPAREN
+    (6) expressao_magica -> . encantamento
+    (7) encantamento -> . ELEMENTO ESTADO lista_efeitos
+    (8) encantamento -> . ELEMENTO lista_efeitos
+
+    INTENSIDADE     shift and go to state 2
+    LPAREN          shift and go to state 3
+    ELEMENTO        shift and go to state 5
+
+    expressao_magica               shift and go to state 10
+    encantamento                   shift and go to state 4
+
+state 4
+
+    (6) expressao_magica -> encantamento .
+
+    VEL             reduce using rule 6 (expressao_magica -> encantamento .)
+    INTRA           reduce using rule 6 (expressao_magica -> encantamento .)
+    ET              reduce using rule 6 (expressao_magica -> encantamento .)
+    $end            reduce using rule 6 (expressao_magica -> encantamento .)
+    RPAREN          reduce using rule 6 (expressao_magica -> encantamento .)
+
+
+state 5
+
+    (7) encantamento -> ELEMENTO . ESTADO lista_efeitos
+    (8) encantamento -> ELEMENTO . lista_efeitos
+    (9) lista_efeitos -> . EFEITO lista_efeitos
+    (10) lista_efeitos -> . EFEITO
+
+    ESTADO          shift and go to state 11
+    EFEITO          shift and go to state 13
+
+    lista_efeitos                  shift and go to state 12
+
+state 6
+
+    (1) expressao_magica -> expressao_magica VEL . expressao_magica
+    (1) expressao_magica -> . expressao_magica VEL expressao_magica
+    (2) expressao_magica -> . expressao_magica INTRA expressao_magica
+    (3) expressao_magica -> . expressao_magica ET expressao_magica
+    (4) expressao_magica -> . INTENSIDADE expressao_magica
+    (5) expressao_magica -> . LPAREN expressao_magica RPAREN
+    (6) expressao_magica -> . encantamento
+    (7) encantamento -> . ELEMENTO ESTADO lista_efeitos
+    (8) encantamento -> . ELEMENTO lista_efeitos
+
+    INTENSIDADE     shift and go to state 2
+    LPAREN          shift and go to state 3
+    ELEMENTO        shift and go to state 5
+
+    expressao_magica               shift and go to state 14
+    encantamento                   shift and go to state 4
+
+state 7
+
+    (2) expressao_magica -> expressao_magica INTRA . expressao_magica
+    (1) expressao_magica -> . expressao_magica VEL expressao_magica
+    (2) expressao_magica -> . expressao_magica INTRA expressao_magica
+    (3) expressao_magica -> . expressao_magica ET expressao_magica
+    (4) expressao_magica -> . INTENSIDADE expressao_magica
+    (5) expressao_magica -> . LPAREN expressao_magica RPAREN
+    (6) expressao_magica -> . encantamento
+    (7) encantamento -> . ELEMENTO ESTADO lista_efeitos
+    (8) encantamento -> . ELEMENTO lista_efeitos
+
+    INTENSIDADE     shift and go to state 2
+    LPAREN          shift and go to state 3
+    ELEMENTO        shift and go to state 5
+
+    expressao_magica               shift and go to state 15
+    encantamento                   shift and go to state 4
+
+state 8
+
+    (3) expressao_magica -> expressao_magica ET . expressao_magica
+    (1) expressao_magica -> . expressao_magica VEL expressao_magica
+    (2) expressao_magica -> . expressao_magica INTRA expressao_magica
+    (3) expressao_magica -> . expressao_magica ET expressao_magica
+    (4) expressao_magica -> . INTENSIDADE expressao_magica
+    (5) expressao_magica -> . LPAREN expressao_magica RPAREN
+    (6) expressao_magica -> . encantamento
+    (7) encantamento -> . ELEMENTO ESTADO lista_efeitos
+    (8) encantamento -> . ELEMENTO lista_efeitos
+
+    INTENSIDADE     shift and go to state 2
+    LPAREN          shift and go to state 3
+    ELEMENTO        shift and go to state 5
+
+    expressao_magica               shift and go to state 16
+    encantamento                   shift and go to state 4
+
+state 9
+
+    (4) expressao_magica -> INTENSIDADE expressao_magica .
+    (1) expressao_magica -> expressao_magica . VEL expressao_magica
+    (2) expressao_magica -> expressao_magica . INTRA expressao_magica
+    (3) expressao_magica -> expressao_magica . ET expressao_magica
+
+    VEL             reduce using rule 4 (expressao_magica -> INTENSIDADE expressao_magica .)
+    INTRA           reduce using rule 4 (expressao_magica -> INTENSIDADE expressao_magica .)
+    ET              reduce using rule 4 (expressao_magica -> INTENSIDADE expressao_magica .)
+    $end            reduce using rule 4 (expressao_magica -> INTENSIDADE expressao_magica .)
+    RPAREN          reduce using rule 4 (expressao_magica -> INTENSIDADE expressao_magica .)
+
+  ! VEL             [ shift and go to state 6 ]
+  ! INTRA           [ shift and go to state 7 ]
+  ! ET              [ shift and go to state 8 ]
+
+
+state 10
+
+    (5) expressao_magica -> LPAREN expressao_magica . RPAREN
+    (1) expressao_magica -> expressao_magica . VEL expressao_magica
+    (2) expressao_magica -> expressao_magica . INTRA expressao_magica
+    (3) expressao_magica -> expressao_magica . ET expressao_magica
+
+    RPAREN          shift and go to state 17
+    VEL             shift and go to state 6
+    INTRA           shift and go to state 7
+    ET              shift and go to state 8
+
+
+state 11
+
+    (7) encantamento -> ELEMENTO ESTADO . lista_efeitos
+    (9) lista_efeitos -> . EFEITO lista_efeitos
+    (10) lista_efeitos -> . EFEITO
+
+    EFEITO          shift and go to state 13
+
+    lista_efeitos                  shift and go to state 18
+
+state 12
+
+    (8) encantamento -> ELEMENTO lista_efeitos .
+
+    VEL             reduce using rule 8 (encantamento -> ELEMENTO lista_efeitos .)
+    INTRA           reduce using rule 8 (encantamento -> ELEMENTO lista_efeitos .)
+    ET              reduce using rule 8 (encantamento -> ELEMENTO lista_efeitos .)
+    $end            reduce using rule 8 (encantamento -> ELEMENTO lista_efeitos .)
+    RPAREN          reduce using rule 8 (encantamento -> ELEMENTO lista_efeitos .)
+
+
+state 13
+
+    (9) lista_efeitos -> EFEITO . lista_efeitos
+    (10) lista_efeitos -> EFEITO .
+    (9) lista_efeitos -> . EFEITO lista_efeitos
+    (10) lista_efeitos -> . EFEITO
+
+    VEL             reduce using rule 10 (lista_efeitos -> EFEITO .)
+    INTRA           reduce using rule 10 (lista_efeitos -> EFEITO .)
+    ET              reduce using rule 10 (lista_efeitos -> EFEITO .)
+    $end            reduce using rule 10 (lista_efeitos -> EFEITO .)
+    RPAREN          reduce using rule 10 (lista_efeitos -> EFEITO .)
+    EFEITO          shift and go to state 13
+
+    lista_efeitos                  shift and go to state 19
+
+state 14
+
+    (1) expressao_magica -> expressao_magica VEL expressao_magica .
+    (1) expressao_magica -> expressao_magica . VEL expressao_magica
+    (2) expressao_magica -> expressao_magica . INTRA expressao_magica
+    (3) expressao_magica -> expressao_magica . ET expressao_magica
+
+    VEL             reduce using rule 1 (expressao_magica -> expressao_magica VEL expressao_magica .)
+    $end            reduce using rule 1 (expressao_magica -> expressao_magica VEL expressao_magica .)
+    RPAREN          reduce using rule 1 (expressao_magica -> expressao_magica VEL expressao_magica .)
+    INTRA           shift and go to state 7
+    ET              shift and go to state 8
+
+  ! INTRA           [ reduce using rule 1 (expressao_magica -> expressao_magica VEL expressao_magica .) ]
+  ! ET              [ reduce using rule 1 (expressao_magica -> expressao_magica VEL expressao_magica .) ]
+  ! VEL             [ shift and go to state 6 ]
+
+
+state 15
+
+    (2) expressao_magica -> expressao_magica INTRA expressao_magica .
+    (1) expressao_magica -> expressao_magica . VEL expressao_magica
+    (2) expressao_magica -> expressao_magica . INTRA expressao_magica
+    (3) expressao_magica -> expressao_magica . ET expressao_magica
+
+    VEL             reduce using rule 2 (expressao_magica -> expressao_magica INTRA expressao_magica .)
+    INTRA           reduce using rule 2 (expressao_magica -> expressao_magica INTRA expressao_magica .)
+    $end            reduce using rule 2 (expressao_magica -> expressao_magica INTRA expressao_magica .)
+    RPAREN          reduce using rule 2 (expressao_magica -> expressao_magica INTRA expressao_magica .)
+    ET              shift and go to state 8
+
+  ! ET              [ reduce using rule 2 (expressao_magica -> expressao_magica INTRA expressao_magica .) ]
+  ! VEL             [ shift and go to state 6 ]
+  ! INTRA           [ shift and go to state 7 ]
+
+
+state 16
+
+    (3) expressao_magica -> expressao_magica ET expressao_magica .
+    (1) expressao_magica -> expressao_magica . VEL expressao_magica
+    (2) expressao_magica -> expressao_magica . INTRA expressao_magica
+    (3) expressao_magica -> expressao_magica . ET expressao_magica
+
+    VEL             reduce using rule 3 (expressao_magica -> expressao_magica ET expressao_magica .)
+    INTRA           reduce using rule 3 (expressao_magica -> expressao_magica ET expressao_magica .)
+    ET              reduce using rule 3 (expressao_magica -> expressao_magica ET expressao_magica .)
+    $end            reduce using rule 3 (expressao_magica -> expressao_magica ET expressao_magica .)
+    RPAREN          reduce using rule 3 (expressao_magica -> expressao_magica ET expressao_magica .)
+
+  ! VEL             [ shift and go to state 6 ]
+  ! INTRA           [ shift and go to state 7 ]
+  ! ET              [ shift and go to state 8 ]
+
+
+state 17
+
+    (5) expressao_magica -> LPAREN expressao_magica RPAREN .
+
+    VEL             reduce using rule 5 (expressao_magica -> LPAREN expressao_magica RPAREN .)
+    INTRA           reduce using rule 5 (expressao_magica -> LPAREN expressao_magica RPAREN .)
+    ET              reduce using rule 5 (expressao_magica -> LPAREN expressao_magica RPAREN .)
+    $end            reduce using rule 5 (expressao_magica -> LPAREN expressao_magica RPAREN .)
+    RPAREN          reduce using rule 5 (expressao_magica -> LPAREN expressao_magica RPAREN .)
+
+
+state 18
+
+    (7) encantamento -> ELEMENTO ESTADO lista_efeitos .
+
+    VEL             reduce using rule 7 (encantamento -> ELEMENTO ESTADO lista_efeitos .)
+    INTRA           reduce using rule 7 (encantamento -> ELEMENTO ESTADO lista_efeitos .)
+    ET              reduce using rule 7 (encantamento -> ELEMENTO ESTADO lista_efeitos .)
+    $end            reduce using rule 7 (encantamento -> ELEMENTO ESTADO lista_efeitos .)
+    RPAREN          reduce using rule 7 (encantamento -> ELEMENTO ESTADO lista_efeitos .)
+
+
+state 19
+
+    (9) lista_efeitos -> EFEITO lista_efeitos .
+
+    VEL             reduce using rule 9 (lista_efeitos -> EFEITO lista_efeitos .)
+    INTRA           reduce using rule 9 (lista_efeitos -> EFEITO lista_efeitos .)
+    ET              reduce using rule 9 (lista_efeitos -> EFEITO lista_efeitos .)
+    $end            reduce using rule 9 (lista_efeitos -> EFEITO lista_efeitos .)
+    RPAREN          reduce using rule 9 (lista_efeitos -> EFEITO lista_efeitos .)
+
