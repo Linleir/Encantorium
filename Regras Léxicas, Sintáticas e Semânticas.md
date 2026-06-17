@@ -5,7 +5,7 @@
 ---
 
 ## 1. Visão Geral
-O *Encantorium* é uma DSL (Domain Specific Language) que traduz sentenças mágicas em círculos mágicos complexos. O objetivo deste projeto foi aplicar na prática os conceitos fundamentais de compiladores — **análise léxica, sintática e semântica** — transformando texto estruturado em representações gráficas (renderização via `turtle`).
+O *Encantorium* é um compilador que traduz sentenças mágicas em círculos mágicos complexos. O objetivo deste projeto foi aplicar na prática os conceitos fundamentais de compiladores — transformando texto estruturado em representações gráficas (renderização via `turtle`).
 
 
 
